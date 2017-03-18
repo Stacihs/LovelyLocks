@@ -40,6 +40,10 @@ namespace LovelyLocks
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+
+            services.AddDbContext<ProductDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -78,6 +82,7 @@ namespace LovelyLocks
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>
+
             {
                 routes.MapRoute(
                     name: "default",
