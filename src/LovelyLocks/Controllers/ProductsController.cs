@@ -23,9 +23,10 @@ namespace LovelyLocks.Controllers
             string searchString, int? page)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["CategorySortParm"] = String.IsNullOrEmpty(sortOrder) ? "category_desc" : "";
-            ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "Name";
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
+            ViewData["CategorySortParm"] = sortOrder == "category" ? "category_desc" : "Category";
             ViewData["DescriptionSortParm"] = sortOrder == "description" ? "description_desc" : "Description";
+            ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "Description";
 
             if (searchString != null)
             {
@@ -42,7 +43,7 @@ namespace LovelyLocks.Controllers
                         select p;
             if (!String.IsNullOrEmpty(searchString))
             {
-                product = product.Where(p => p.Category.Contains(searchString)
+                product = product.Where(p => p.Name.Contains(searchString)
                 || p.Description.Contains(searchString));
             }
             switch (sortOrder)
@@ -111,6 +112,7 @@ namespace LovelyLocks.Controllers
             {
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction("Index");
             }
             return View(product);
