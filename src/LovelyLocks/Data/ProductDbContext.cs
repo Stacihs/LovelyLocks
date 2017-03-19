@@ -14,6 +14,7 @@ namespace LovelyLocks.Data
 
         public DbSet<Product> Product { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<CartLine> CartLine { get; set; }
 
 
     }
