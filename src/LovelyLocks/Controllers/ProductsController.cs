@@ -1,11 +1,9 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LovelyLocks.Data;
 using LovelyLocks.Models;
-using LovelyLocks.Infrastructure;
 
 namespace LovelyLocks.Controllers
 {
@@ -19,64 +17,10 @@ namespace LovelyLocks.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter,
-            string searchString, int? page)
+        public async Task<IActionResult> Index()
         {
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
-            ViewData["CategorySortParm"] = sortOrder == "category" ? "category_desc" : "Category";
-            ViewData["DescriptionSortParm"] = sortOrder == "description" ? "description_desc" : "Description";
-            ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "Description";
-
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            ViewData["CurrentFilter"] = searchString;
-
-            var product = from p in _context.Product
-                        select p;
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                product = product.Where(p => p.Name.Contains(searchString)
-                || p.Description.Contains(searchString));
-            }
-            switch (sortOrder)
-            {
-                case "category_desc":
-                    product = product.OrderByDescending(p => p.Category);
-                    break;
-                case "name":
-                    product = product.OrderBy(p => p.Name);
-                    break;
-
-                case "name_desc":
-                    product = product.OrderByDescending(p => p.Name);
-                    break;
-                case "description":
-                    product = product.OrderBy(s => s.Description);
-                    break;
-
-                case "description_desc":
-                    product = product.OrderByDescending(p => p.Description);
-                    break;
-                default:
-                    product = product.OrderBy(p => p.ProductId);
-                    break;
-
-            }
-
-            int pageSize = 20;
-            return View(await PaginatedList<Product>.CreateAsync(product.AsNoTracking(), page ?? 1, pageSize));
-
-
+            return View(await _context.Product.ToListAsync());
         }
-
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -86,7 +30,7 @@ namespace LovelyLocks.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductId == id);
+            var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductID == id);
             if (product == null)
             {
                 return NotFound();
@@ -106,13 +50,12 @@ namespace LovelyLocks.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Category,Description,Name,Price")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductID,Category,Description,Name,Price")] Product product)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(product);
                 await _context.SaveChangesAsync();
-
                 return RedirectToAction("Index");
             }
             return View(product);
@@ -126,7 +69,7 @@ namespace LovelyLocks.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductId == id);
+            var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductID == id);
             if (product == null)
             {
                 return NotFound();
@@ -139,9 +82,9 @@ namespace LovelyLocks.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Category,Description,Name,Price")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductID,Category,Description,Name,Price")] Product product)
         {
-            if (id != product.ProductId)
+            if (id != product.ProductID)
             {
                 return NotFound();
             }
@@ -155,7 +98,7 @@ namespace LovelyLocks.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.ProductId))
+                    if (!ProductExists(product.ProductID))
                     {
                         return NotFound();
                     }
@@ -177,7 +120,7 @@ namespace LovelyLocks.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductId == id);
+            var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductID == id);
             if (product == null)
             {
                 return NotFound();
@@ -191,7 +134,7 @@ namespace LovelyLocks.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductId == id);
+            var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductID == id);
             _context.Product.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -199,7 +142,7 @@ namespace LovelyLocks.Controllers
 
         private bool ProductExists(int id)
         {
-            return _context.Product.Any(e => e.ProductId == id);
+            return _context.Product.Any(e => e.ProductID == id);
         }
     }
 }
