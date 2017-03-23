@@ -18,5 +18,7 @@ namespace LovelyLocks.Models.ViewModels
         public decimal Price { get; set; }
         [Required]
         public string Category { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }
