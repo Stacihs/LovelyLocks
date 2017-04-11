@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<string>
   
-    @*<div class="row panel">
+    <div class="row panel">
         <div id="categories" class="col-xs-3">
             @await Component.InvokeAsync("NavigationMenu")
         </div>
-        <div class="col-xs-2">*@
-            @*<a class="btn btn-block btn-default"
+        <div class="col-xs-2">
+            <a class="btn btn-block btn-default"
                asp-action="List"
                asp-controller="Product"
-               asp-route-category="">Home</a>*@
+               asp-route-category="">Home</a>
 
             @foreach (string category in Model)
                 {
@@ -21,6 +21,6 @@
                         @category
                      </a>
                 }
-          @*</div>
-       </div>*@
+          </div>
+       </div>
     
