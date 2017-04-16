@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using LovelyLocks.Models;
 using LovelyLocks.Models.ViewModels;
-using LovelyLocks.Data;
 
 namespace LovelyLocks.Controllers
 {
@@ -18,6 +17,8 @@ namespace LovelyLocks.Controllers
             cart = cartService;
         }
 
+
+        //Get Cart
         public ViewResult Index(string returnUrl)
         {
             return View(new CartIndexViewModel
@@ -27,6 +28,7 @@ namespace LovelyLocks.Controllers
             });
         }
 
+        //Add a product to cart
         public RedirectToActionResult AddToCart(int productId, string returnUrl)
         {
             Product product = repository.Products
@@ -39,6 +41,7 @@ namespace LovelyLocks.Controllers
             return RedirectToAction("Index", new { returnUrl });
         }
 
+        //Remove item from cart
         public RedirectToActionResult RemoveFromCart(int productId, string returnUrl)
         {
             Product product = repository.Products
