@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background: url(https://cdn.pixabay.com/photo/2014/10/29/01/10/woman-507444__340.png);
 }
 
 /* Wrapping element */
@@ -8,6 +9,7 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+   
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
